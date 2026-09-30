@@ -1,0 +1,70 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "com.meta-ads-http",
+  "name": "Meta Ads (Remote)",
+  "alias": "meta-ads",
+  "description": "Query and manage Facebook and Instagram advertising campaigns, ad sets, creatives, signal health, and performance reporting via Meta's hosted remote MCP server.",
+  "logo": "https://avatars.githubusercontent.com/u/69631?v=4",
+  "schema_version": "2.1",
+  "categories": [
+    "productivity",
+    "monitoring"
+  ],
+  "tags": [
+    "meta",
+    "facebook",
+    "instagram",
+    "ads",
+    "marketing",
+    "campaigns",
+    "remote"
+  ],
+  "transport": {
+    "type": "http",
+    "url": "https://mcp.facebook.com/ads",
+    "headers": {
+      "Authorization": "Bearer ${input:META_ACCESS_TOKEN}"
+    },
+    "metadata": {
+      "inputs": [
+        {
+          "id": "META_ACCESS_TOKEN",
+          "label": "Meta User or System User Access Token",
+          "description": "A Meta User Access Token or System User Access Token with ads_read, ads_management, and business_management permissions.",
+          "type": "text",
+          "required": true,
+          "secret": true,
+          "placeholder": "EAA...",
+          "obtain": {
+            "url": "https://developers.facebook.com/apps",
+            "instructions": "1. Go to Meta for Developers (developers.facebook.com) and select your App (or create one with Business type).\n2. Go to Tools > Graph API Explorer, or in Meta Business Suite navigate to System Users to generate a permanent System User Token.\n3. Include the following permissions: ads_read, ads_management, business_management.\n4. Copy and paste the Access Token here.",
+            "button_label": "Open Meta Developers"
+          }
+        }
+      ]
+    }
+  },
+  "auth": {
+    "type": "api_key",
+    "instructions": "Requires a Meta Access Token (System User Token or User Access Token) created through a Meta Developer App with ads_read and ads_management permissions."
+  },
+  "contributor": {
+    "name": "Meta",
+    "github": "facebook",
+    "url": "https://developers.facebook.com"
+  },
+  "links": {
+    "repository": "https://github.com/facebook",
+    "homepage": "https://developers.facebook.com",
+    "documentation": "https://developers.facebook.com/docs/marketing-apis"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false,
+    "read_only_mode": false
+  }
+}
