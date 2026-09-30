@@ -1,0 +1,80 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "com.google-analytics-mcp",
+  "name": "Google Analytics",
+  "alias": "ga",
+  "description": "Query Google Analytics accounts, properties, and run core, realtime, and funnel reports through the Google Analytics MCP server.",
+  "logo": "https://www.gstatic.com/analytics-suite/header/suite/v2/ic_analytics.svg",
+  "schema_version": "2.1",
+  "categories": [
+    "monitoring"
+  ],
+  "tags": [
+    "google",
+    "analytics",
+    "ga4",
+    "reports",
+    "metrics"
+  ],
+  "transport": {
+    "type": "stdio",
+    "command": "pipx",
+    "args": [
+      "run",
+      "analytics-mcp"
+    ],
+    "env": {
+      "GOOGLE_APPLICATION_CREDENTIALS": "${input:GOOGLE_APPLICATION_CREDENTIALS}",
+      "GOOGLE_PROJECT_ID": "${input:GOOGLE_PROJECT_ID}",
+      "GRPC_DNS_RESOLVER": "native"
+    },
+    "metadata": {
+      "inputs": [
+        {
+          "id": "GOOGLE_APPLICATION_CREDENTIALS",
+          "label": "Google Application Default Credentials (ADC) Path",
+          "type": "file_path",
+          "required": true,
+          "secret": true,
+          "placeholder": "~/.config/gcloud/application_default_credentials.json",
+          "description": "Path to your application_default_credentials.json (generated via gcloud) or a Service Account JSON key file.",
+          "obtain": {
+            "url": "https://console.cloud.google.com/apis/credentials",
+            "instructions": "1. Create an OAuth 2.0 Client ID (Desktop app) in Google Cloud Console and download the JSON.\n2. Run: gcloud auth application-default login --scopes=https://www.googleapis.com/auth/analytics.readonly,https://www.googleapis.com/auth/cloud-platform --client-id-file=PATH_TO_CLIENT_JSON\n3. Provide the generated path (%APPDATA%\\gcloud\\application_default_credentials.json on Windows, or ~/.config/gcloud/application_default_credentials.json on macOS/Linux).",
+            "button_label": "Open Cloud Console"
+          }
+        },
+        {
+          "id": "GOOGLE_PROJECT_ID",
+          "label": "Google Cloud Project ID",
+          "type": "text",
+          "required": true,
+          "description": "The Google Cloud Project ID where Google Analytics Admin and Data APIs are enabled."
+        }
+      ]
+    }
+  },
+  "auth": {
+    "type": "oauth",
+    "instructions": "Requires Google Cloud Application Default Credentials (ADC). Enable the Google Analytics Admin & Data APIs in your Google Cloud Project, create a Desktop OAuth Client ID, and run 'gcloud auth application-default login' with the analytics.readonly scope."
+  },
+  "contributor": {
+    "name": "Google Analytics",
+    "github": "googleanalytics",
+    "url": "https://analytics.google.com"
+  },
+  "links": {
+    "repository": "https://github.com/googleanalytics/google-analytics-mcp",
+    "homepage": "https://analytics.google.com",
+    "documentation": "https://github.com/googleanalytics/google-analytics-mcp#readme"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false,
+    "read_only_mode": true
+  }
+}
