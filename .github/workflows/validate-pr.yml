@@ -1,13 +1,9 @@
 name: Validate PR
 
 on:
+  # No `paths:` filter: this job is a required status check, and a required
+  # check that never runs leaves PRs stuck on "Expected".
   pull_request:
-    paths:
-      - "servers/**"
-      - "categories.json"
-      - "schemas/**"
-      - "scripts/**"
-      - "tests/**"
 
 jobs:
   validate:
@@ -16,10 +12,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 20
           cache: npm
@@ -29,7 +25,7 @@ jobs:
 
       - name: Get changed server files
         id: changed
-        uses: tj-actions/changed-files@v44
+        uses: tj-actions/changed-files@2d756ea4c53f7f6b397767d8723b3a10a9f35bf2 # v44.0.0
         with:
           files: "servers/*.json"
 
