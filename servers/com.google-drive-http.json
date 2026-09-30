@@ -1,0 +1,51 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "com.google-drive-http",
+  "name": "Google Drive (Remote)",
+  "alias": "gdrive-http",
+  "description": "Search, read, create, and manage Google Drive files and folders through Google's hosted remote MCP server. Connects via OAuth.",
+  "logo": "https://avatars.githubusercontent.com/u/1342004?v=4",
+  "schema_version": "2.1",
+  "categories": [
+    "productivity",
+    "file-system"
+  ],
+  "tags": [
+    "google",
+    "drive",
+    "files",
+    "cloud-storage",
+    "docs",
+    "remote"
+  ],
+  "transport": {
+    "type": "http",
+    "url": "https://drivemcp.googleapis.com/mcp/v1",
+    "metadata": {
+      "inputs": []
+    }
+  },
+  "auth": {
+    "type": "oauth",
+    "instructions": "Requires Google OAuth 2.0 credentials (Client ID and Client Secret). In Google Cloud Console, enable the Google Drive API, create an OAuth 2.0 Client ID (Desktop or Web application), and configure clientId and clientSecret in your MCP client."
+  },
+  "contributor": {
+    "name": "Google",
+    "github": "google",
+    "url": "https://workspace.google.com/products/drive/"
+  },
+  "links": {
+    "repository": "https://github.com/google",
+    "homepage": "https://workspace.google.com/products/drive/",
+    "documentation": "https://developers.google.com/drive"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": false,
+    "read_only_mode": false
+  }
+}
