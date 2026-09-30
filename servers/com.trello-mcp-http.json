@@ -1,0 +1,50 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "com.trello-mcp-http",
+  "name": "Trello (HTTP)",
+  "alias": "trello-http",
+  "description": "Manage Trello boards, lists, cards, checklists, and more through Trello's official hosted MCP server. Connects via OAuth and exposes tools for reading and writing Trello content within a single authorised workspace.",
+  "logo": "https://avatars.githubusercontent.com/u/168894?v=4",
+  "schema_version": "2.1",
+  "categories": [
+    "productivity"
+  ],
+  "tags": [
+    "trello",
+    "kanban",
+    "boards",
+    "cards",
+    "project-management",
+    "productivity"
+  ],
+  "transport": {
+    "type": "http",
+    "url": "https://mcp.trello.com/v1",
+    "metadata": {
+      "inputs": []
+    }
+  },
+  "auth": {
+    "type": "oauth",
+    "instructions": "Authenticate via Trello's OAuth flow when prompted. The AI client opens a browser to the consent screen where you choose the Trello workspace to authorise. Access is workspace-scoped and revocable from Trello's settings."
+  },
+  "contributor": {
+    "name": "Trello",
+    "github": "atlassian",
+    "url": "https://trello.com"
+  },
+  "links": {
+    "repository": "https://github.com/atlassian/trello-mcp-server",
+    "homepage": "https://trello.com",
+    "documentation": "https://github.com/atlassian/trello-mcp-server/blob/main/README.md"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false,
+    "read_only_mode": false
+  }
+}
