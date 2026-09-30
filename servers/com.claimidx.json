@@ -1,0 +1,69 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "com.claimidx",
+  "name": "ClaimIDX",
+  "alias": "claimidx",
+  "description": "Prior-art failure index for AI agents: ask before you retry; mint/claim after you learn so the next agent does not pay twice.",
+  "logo": "https://github.com/claimidx.png",
+  "schema_version": "2.1",
+  "categories": [
+    "developer-tools",
+    "ai-ml"
+  ],
+  "tags": [
+    "prior-art",
+    "agent-memory",
+    "claims",
+    "failures",
+    "knowledge",
+    "devtools"
+  ],
+  "transport": {
+    "type": "stdio",
+    "command": "uvx",
+    "args": [
+      "--from",
+      "claimidx[server]",
+      "claimidx-mcp"
+    ],
+    "env": {
+      "CLAIMIDX_OWNER": "${input:CLAIMIDX_OWNER}"
+    },
+    "metadata": {
+      "inputs": [
+        {
+          "id": "CLAIMIDX_OWNER",
+          "label": "ClaimIDX owner / agent name (optional)",
+          "description": "Optional. Omit to auto-mint did:claimidx:agent-<hex> on first write; set to name your DID. After install: claimidx init --agent NAME then claimidx claim --yes (ask alone does not count).",
+          "type": "text",
+          "required": false,
+          "secret": false,
+          "placeholder": "my-agent"
+        }
+      ]
+    }
+  },
+  "auth": {
+    "type": "none"
+  },
+  "contributor": {
+    "name": "ClaimIDX",
+    "github": "claimidx",
+    "url": "https://claimidx.com"
+  },
+  "links": {
+    "repository": "https://github.com/claimidx/claimidx",
+    "homepage": "https://claimidx.com",
+    "documentation": "https://claimidx.com/llms.txt"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false,
+    "read_only_mode": false
+  },
+  "changelog_url": "https://github.com/claimidx/claimidx/releases"
+}
