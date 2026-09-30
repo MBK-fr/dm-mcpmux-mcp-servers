@@ -1,0 +1,56 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "com.google-chrome-devtools-mcp",
+  "name": "Chrome DevTools",
+  "alias": "chrome-devtools",
+  "description": "Control and inspect a live Chrome browser from your coding agent. Get performance traces, network and console analysis, screenshots, and reliable puppeteer-driven automation, all backed by Chrome DevTools.",
+  "logo": "https://avatars.githubusercontent.com/u/1778938?v=4",
+  "schema_version": "2.1",
+  "categories": [
+    "developer-tools"
+  ],
+  "tags": [
+    "chrome",
+    "devtools",
+    "browser",
+    "puppeteer",
+    "performance",
+    "debugging",
+    "automation"
+  ],
+  "transport": {
+    "type": "stdio",
+    "command": "npx",
+    "args": [
+      "-y",
+      "chrome-devtools-mcp@latest"
+    ],
+    "env": {},
+    "metadata": {
+      "inputs": []
+    }
+  },
+  "auth": {
+    "type": "none",
+    "instructions": "No credentials required. The server launches a Chrome instance on first use. Requires a current stable version of Chrome (or Chrome for Testing) on the host. Add --headless for headless mode or --slim for a reduced tool set. Pass --no-usage-statistics to opt out of Google's anonymous usage collection."
+  },
+  "contributor": {
+    "name": "Google Chrome DevTools",
+    "github": "ChromeDevTools",
+    "url": "https://developer.chrome.com/docs/devtools/agents"
+  },
+  "links": {
+    "repository": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
+    "homepage": "https://developer.chrome.com/docs/devtools/agents",
+    "documentation": "https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/README.md"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false,
+    "read_only_mode": false
+  }
+}
