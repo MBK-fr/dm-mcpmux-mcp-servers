@@ -1,0 +1,39 @@
+{
+    "$schema": "../schemas/server-definition.schema.json",
+    "id": "community.corroborateme",
+    "name": "CorroborateMe",
+    "alias": "corroborateme",
+    "description": "Prove end users to agents and apps: login-links, OIDC clients, and API keys over remote MCP",
+    "logo": "https://avatars.githubusercontent.com/u/326638803?v=4",
+    "schema_version": "2.1",
+    "categories": ["security", "developer-tools"],
+    "tags": ["identity", "login-link", "oidc", "oauth", "agents", "remote"],
+    "transport": {
+          "type": "http",
+          "url": "https://corroborateme.com/mcp",
+          "metadata": {
+                  "inputs": []
+          }
+    },
+    "auth": {
+          "type": "oauth",
+          "instructions": "Connects via OAuth. Your MCP host discovers the authorization server from https://corroborateme.com/.well-known/oauth-protected-resource and opens a browser to sign in. Hosts without OAuth support can send a CorroborateMe API key instead as Authorization: Bearer aa_... (see https://corroborateme.com/docs)."
+    },
+    "contributor": {
+          "name": "riderc",
+          "github": "riderc",
+          "url": "https://github.com/riderc"
+    },
+    "links": {
+          "repository": "https://github.com/CNR-Consulting/corroborate-me",
+          "homepage": "https://corroborateme.com",
+          "documentation": "https://corroborateme.com/docs"
+    },
+    "platforms": ["all"],
+    "capabilities": {
+          "tools": true,
+          "resources": false,
+          "prompts": false,
+          "read_only_mode": false
+    }
+}
