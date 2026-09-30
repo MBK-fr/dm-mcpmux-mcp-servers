@@ -1,0 +1,50 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "com.google-sheets-http",
+  "name": "Google Sheets (Remote)",
+  "alias": "sheets-http",
+  "description": "Read, write, format, and manage Google Sheets spreadsheets through Google's hosted remote MCP server. Connects via OAuth.",
+  "logo": "https://avatars.githubusercontent.com/u/1342004?v=4",
+  "schema_version": "2.1",
+  "categories": [
+    "productivity"
+  ],
+  "tags": [
+    "google",
+    "sheets",
+    "spreadsheets",
+    "data",
+    "tables",
+    "remote"
+  ],
+  "transport": {
+    "type": "http",
+    "url": "https://sheetsmcp.googleapis.com/mcp/v1",
+    "metadata": {
+      "inputs": []
+    }
+  },
+  "auth": {
+    "type": "oauth",
+    "instructions": "Requires Google OAuth 2.0 credentials (Client ID and Client Secret). In Google Cloud Console, enable the Google Sheets API, create an OAuth 2.0 Client ID (Desktop or Web application), and configure clientId and clientSecret in your MCP client."
+  },
+  "contributor": {
+    "name": "Google",
+    "github": "google",
+    "url": "https://workspace.google.com/products/sheets/"
+  },
+  "links": {
+    "repository": "https://github.com/google",
+    "homepage": "https://workspace.google.com/products/sheets/",
+    "documentation": "https://developers.google.com/sheets"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": false,
+    "read_only_mode": false
+  }
+}
