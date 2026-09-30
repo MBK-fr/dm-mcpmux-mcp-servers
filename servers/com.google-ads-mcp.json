@@ -1,0 +1,104 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "com.google-ads-mcp",
+  "name": "Google Ads",
+  "alias": "google-ads",
+  "description": "Query Google Ads campaigns, performance metrics, ad groups, and customer accounts using GAQL through the Google Ads MCP server.",
+  "logo": "https://avatars.githubusercontent.com/u/1041926?v=4",
+  "schema_version": "2.1",
+  "categories": [
+    "productivity",
+    "monitoring"
+  ],
+  "tags": [
+    "google",
+    "ads",
+    "adwords",
+    "campaigns",
+    "marketing",
+    "reporting",
+    "gaql"
+  ],
+  "transport": {
+    "type": "stdio",
+    "command": "pipx",
+    "args": [
+      "run",
+      "google-ads-mcp"
+    ],
+    "env": {
+      "GOOGLE_APPLICATION_CREDENTIALS": "${input:GOOGLE_APPLICATION_CREDENTIALS}",
+      "GOOGLE_PROJECT_ID": "${input:GOOGLE_PROJECT_ID}",
+      "GOOGLE_ADS_DEVELOPER_TOKEN": "${input:GOOGLE_ADS_DEVELOPER_TOKEN}",
+      "GOOGLE_ADS_LOGIN_CUSTOMER_ID": "${input:GOOGLE_ADS_LOGIN_CUSTOMER_ID}"
+    },
+    "metadata": {
+      "inputs": [
+        {
+          "id": "GOOGLE_APPLICATION_CREDENTIALS",
+          "label": "Google Application Default Credentials (ADC) Path",
+          "type": "file_path",
+          "required": true,
+          "secret": true,
+          "placeholder": "~/.config/gcloud/application_default_credentials.json",
+          "description": "Path to your application_default_credentials.json generated with gcloud using the adwords scope.",
+          "obtain": {
+            "url": "https://console.cloud.google.com/apis/credentials",
+            "instructions": "1. Create an OAuth 2.0 Client ID (Desktop app) in Google Cloud Console and download the JSON.\n2. Run: gcloud auth application-default login --scopes=https://www.googleapis.com/auth/adwords,https://www.googleapis.com/auth/cloud-platform --client-id-file=PATH_TO_CLIENT_JSON\n3. Provide the generated credentials path (%APPDATA%\\gcloud\\application_default_credentials.json on Windows, or ~/.config/gcloud/application_default_credentials.json on macOS/Linux).",
+            "button_label": "Open Cloud Console"
+          }
+        },
+        {
+          "id": "GOOGLE_PROJECT_ID",
+          "label": "Google Cloud Project ID",
+          "type": "text",
+          "required": true,
+          "description": "The Google Cloud Project ID with the Google Ads API enabled."
+        },
+        {
+          "id": "GOOGLE_ADS_DEVELOPER_TOKEN",
+          "label": "Google Ads Developer Token",
+          "type": "text",
+          "required": true,
+          "secret": true,
+          "description": "Your Google Ads API developer token (at least Explorer access is required to query production accounts).",
+          "obtain": {
+            "url": "https://developers.google.com/google-ads/api/docs/get-started/dev-token",
+            "instructions": "1. Sign in to your Google Ads manager account.\n2. Navigate to Tools and Settings > API Center.\n3. Copy your Developer Token or request access.",
+            "button_label": "Get Developer Token"
+          }
+        },
+        {
+          "id": "GOOGLE_ADS_LOGIN_CUSTOMER_ID",
+          "label": "Login Customer ID (MCC)",
+          "type": "text",
+          "required": false,
+          "description": "Optional: If accessing customer accounts through a manager account (MCC), specify the numeric 10-digit manager customer ID (without hyphens)."
+        }
+      ]
+    }
+  },
+  "auth": {
+    "type": "oauth",
+    "instructions": "Requires Google Cloud Application Default Credentials (ADC) with the adwords scope, and a Google Ads API Developer Token. Generate ADC via 'gcloud auth application-default login --scopes=https://www.googleapis.com/auth/adwords,https://www.googleapis.com/auth/cloud-platform --client-id-file=...'."
+  },
+  "contributor": {
+    "name": "Google Ads",
+    "github": "googleads",
+    "url": "https://developers.google.com/google-ads/api"
+  },
+  "links": {
+    "repository": "https://github.com/googleads/google-ads-mcp",
+    "homepage": "https://developers.google.com/google-ads",
+    "documentation": "https://github.com/googleads/google-ads-mcp#readme"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": false,
+    "read_only_mode": true
+  }
+}
