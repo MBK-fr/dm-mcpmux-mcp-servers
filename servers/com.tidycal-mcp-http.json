@@ -1,0 +1,48 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "com.tidycal-mcp-http",
+  "name": "TidyCal (Remote)",
+  "alias": "tidycal",
+  "description": "Query your TidyCal booking types, upcoming meetings, availability, and schedule through TidyCal's hosted remote MCP server. Connects via OAuth.",
+  "logo": "https://asset-tidycal.b-cdn.net/img/logo-blue.svg",
+  "schema_version": "2.1",
+  "categories": [
+    "productivity"
+  ],
+  "tags": [
+    "tidycal",
+    "calendar",
+    "scheduling",
+    "appointments",
+    "meetings",
+    "remote"
+  ],
+  "transport": {
+    "type": "http",
+    "url": "https://tidycal.com/mcp",
+    "metadata": {
+      "inputs": []
+    }
+  },
+  "auth": {
+    "type": "oauth",
+    "instructions": "Requires an active paid TidyCal plan. When connecting, your MCP host will initiate the TidyCal OAuth authorization flow to grant read-only access to your calendar and bookings."
+  },
+  "contributor": {
+    "name": "TidyCal",
+    "url": "https://tidycal.com"
+  },
+  "links": {
+    "homepage": "https://tidycal.com",
+    "documentation": "https://tidycal.com"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false,
+    "read_only_mode": true
+  }
+}
