@@ -1,0 +1,12 @@
+# Paths that control CI, validation and dependencies need a review from a
+# maintainer. Server definitions (servers/*.json) have no owner on purpose,
+# so any collaborator with write access can approve those.
+
+/.github/          @its-mash
+/scripts/          @its-mash
+/schemas/          @its-mash
+/tests/            @its-mash
+/package.json      @its-mash
+/package-lock.json @its-mash
+/pnpm-lock.yaml    @its-mash
+/vitest.config.ts  @its-mash
