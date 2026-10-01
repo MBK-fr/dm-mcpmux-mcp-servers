@@ -2,8 +2,8 @@
   "$schema": "../schemas/server-definition.schema.json",
   "id": "com.cloudflare-docs",
   "name": "Cloudflare Docs",
-  "alias": "cfdocs",
-  "description": "Search and browse Cloudflare documentation",
+  "alias": "cf-docs",
+  "description": "Search Cloudflare developer documentation using semantic search. Covers Workers, Pages, R2, D1, KV, Durable Objects, Zero Trust, and all Cloudflare products.",
   "logo": "https://avatars.githubusercontent.com/u/314135?v=4",
   "schema_version": "2.1",
   "categories": [
@@ -14,7 +14,12 @@
     "cloudflare",
     "docs",
     "documentation",
-    "search"
+    "workers",
+    "pages",
+    "r2",
+    "d1",
+    "cdn",
+    "cloud"
   ],
   "transport": {
     "type": "http",
@@ -33,14 +38,15 @@
   },
   "links": {
     "repository": "https://github.com/cloudflare/mcp-server-cloudflare",
-    "documentation": "https://developers.cloudflare.com/mcp"
+    "homepage": "https://developers.cloudflare.com",
+    "documentation": "https://developers.cloudflare.com/agents/model-context-protocol/mcp-servers-for-cloudflare/"
   },
   "platforms": [
     "all"
   ],
   "capabilities": {
     "tools": true,
-    "resources": true,
+    "resources": false,
     "prompts": false,
     "read_only_mode": true
   }

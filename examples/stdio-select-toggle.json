@@ -1,0 +1,91 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "community.playwright-npx",
+  "name": "Playwright (npx)",
+  "alias": "playwright",
+  "description": "Browser automation using Playwright via npx. Navigate pages, click elements, fill forms, take screenshots, and interact with web content. Runs headed by default.",
+  "logo": "https://avatars.githubusercontent.com/u/6154722?v=4",
+  "schema_version": "2.1",
+  "categories": [
+    "developer-tools"
+  ],
+  "tags": [
+    "playwright",
+    "browser",
+    "automation",
+    "testing",
+    "screenshots",
+    "web",
+    "scraping",
+    "accessibility"
+  ],
+  "transport": {
+    "type": "stdio",
+    "command": "npx",
+    "args": [
+      "@playwright/mcp@latest"
+    ],
+    "metadata": {
+      "inputs": [
+        {
+          "id": "PLAYWRIGHT_MCP_BROWSER",
+          "label": "Browser",
+          "description": "Browser to use for automation. Defaults to Chrome if not specified.",
+          "type": "select",
+          "required": false,
+          "secret": false,
+          "placeholder": "chrome",
+          "options": [
+            {
+              "value": "chrome",
+              "label": "Chrome"
+            },
+            {
+              "value": "firefox",
+              "label": "Firefox"
+            },
+            {
+              "value": "webkit",
+              "label": "WebKit"
+            },
+            {
+              "value": "msedge",
+              "label": "Microsoft Edge"
+            }
+          ]
+        },
+        {
+          "id": "PLAYWRIGHT_MCP_HEADLESS",
+          "label": "Headless Mode",
+          "description": "Run browser in headless mode (no visible window). Set to true for server environments.",
+          "type": "boolean",
+          "required": false,
+          "secret": false
+        }
+      ]
+    }
+  },
+  "auth": {
+    "type": "none"
+  },
+  "contributor": {
+    "name": "Microsoft",
+    "github": "microsoft",
+    "url": "https://playwright.dev"
+  },
+  "links": {
+    "repository": "https://github.com/microsoft/playwright-mcp",
+    "homepage": "https://playwright.dev",
+    "documentation": "https://github.com/microsoft/playwright-mcp#readme"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false,
+    "read_only_mode": false
+  },
+  "changelog_url": "https://github.com/microsoft/playwright-mcp/releases"
+}

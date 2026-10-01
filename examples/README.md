@@ -1,178 +1,62 @@
-# MCP Server Definition Examples
+# Server Definition Examples
 
-This directory contains example server definitions demonstrating various features and configurations of the MCP server definition schema.
+Starter templates for new server definitions. Every file here is a **copy of a real definition in [`servers/`](../servers/)**, so it shows a shape that works in McpMux today. `pnpm test` validates every example against the schema, so they can't drift into invalid JSON.
 
-## Available Examples
+Copy the closest one to `servers/<your-id>.json` and edit it. Don't build from scratch.
 
-### 1. [complete-example.json](./complete-example.json)
-**Comprehensive Feature Showcase**
+## Pick an Example
 
-Demonstrates all available schema fields including:
-- Local (stdio) transport with command execution
-- API key authentication
-- Multiple input fields with obtain instructions
-- Complete publisher information
-- Badge system (official, verified, featured)
-- Installation metadata with prerequisites
-- Rich media content (screenshots, video, banner)
-- Full capabilities configuration
+| File | Transport | `auth.type` | What it demonstrates | Copied from |
+|------|-----------|-------------|----------------------|-------------|
+| [`stdio-no-auth.json`](./stdio-no-auth.json) | stdio (`npx`) | `none` | The simplest possible server: no inputs, `"inputs": []` | `community.sequential-thinking-npx` |
+| [`stdio-local-path.json`](./stdio-local-path.json) | stdio (`npx`) | `none` | A **non-secret** `directory_path` input passed in `args`. Inputs don't imply auth | `community.filesystem` |
+| [`stdio-select-toggle.json`](./stdio-select-toggle.json) | stdio (`npx`) | `none` | `select` with `options` and a `boolean` toggle, both optional. No `env` block: inputs are exported as env vars named after their `id` | `community.playwright-npx` |
+| [`stdio-api-key.json`](./stdio-api-key.json) | stdio (`npx`) | `api_key` | A required secret input wired into `env`, with an `obtain` block | `community.brave-search-npx` |
+| [`complete-example.json`](./complete-example.json) | stdio (`docker`) | `api_key` | Docker `-e NAME` passthrough, a required token and an optional non-secret setting | `com.github-mcp-docker` |
+| [`sponsored-example.json`](./sponsored-example.json) | stdio (`npx`) | `api_key` | Integration token in `env`, with `obtain` steps that include a post-setup step (sharing pages with the integration) | `com.notion-mcp-npx` |
+| [`stdio-multi-input.json`](./stdio-multi-input.json) | stdio (`uvx`) | `optional_api_key` | Python server with connection details: `number` / `boolean` inputs with `default` values and an optional secret password | `com.clickhouse-mcp-uvx` |
+| [`read-only-example.json`](./read-only-example.json) | http | `none` | A hosted endpoint with no auth and `read_only_mode: true` | `com.cloudflare-docs` |
+| [`http-api-key-header.json`](./http-api-key-header.json) | http | `api_key` | A required token sent as `Authorization: Bearer ${input:…}` in `headers` | `com.github-mcp-http-pat` |
+| [`http-optional-api-key.json`](./http-optional-api-key.json) | http | `optional_api_key` | The same header wiring, but `required: false`. Anonymous access works | `co.huggingface-mcp` |
+| [`remote-hosted-example.json`](./remote-hosted-example.json) | http | `oauth` | A hosted endpoint where McpMux runs the OAuth sign-in. No inputs, no headers | `com.atlassian-mcp` |
 
-**Use this as a template when creating fully-featured server definitions.**
+> `sponsored-example.json` keeps its old filename so existing links keep working. It's an ordinary npx + token definition. `sponsored` is a platform-managed field that contributors can't set.
 
----
+## The One Rule People Miss
 
-### 2. [remote-hosted-example.json](./remote-hosted-example.json)
-**Cloud/Remote Server Pattern**
+`auth.type` is only a **label**. The setup form comes from `transport.metadata.inputs`, and a value only reaches the server through a `${input:ID}` placeholder:
 
-Key features:
-- HTTP transport (remote endpoint)
-- OAuth authentication
-- `hosting_type: "remote"` - runs in cloud, no local installation
-- Easy installation (no prerequisites)
-- Minimal setup time
+| Transport | Where placeholders go |
+|-----------|-----------------------|
+| stdio | `env` (preferred for secrets), `args`, `command` |
+| http | `headers` or `url` — nothing else is sent |
 
-**Use this pattern for SaaS/cloud-hosted MCP servers.**
+So an `api_key` server needs **all three**: the `auth` label, a `secret` + `required` input, and a placeholder that puts the value where the server reads it. See [Auth, Inputs & Placeholders](../README.md#auth-inputs--placeholders--how-they-fit-together) in the main README.
 
----
+## What to Change When You Copy
 
-### 3. [sponsored-example.json](./sponsored-example.json)
-**Sponsored Server Listing**
+1. **`id`, `name`, `alias`.** Follow `{tld}.{publisher}-{name}` with a transport suffix (`-npx`, `-uvx`, `-docker`, `-http`). Rename the file to match the `id`. `pnpm check-conflicts` fails if you forget, because the copied ID already exists in `servers/`.
+2. **`description`, `tags`, `categories`, `logo`, `contributor`, `links`, `changelog_url`.** Describe the new server; don't keep the example's.
+3. **`transport`.** Take the package name, image, CLI flags, env var names and endpoint URL from the upstream README.
+4. **`metadata.inputs`.** One entry per value the user provides. Every `${input:ID}` needs a matching `id`. Credentials get `"secret": true` and an `obtain` block.
+5. **`auth`.** Re-check `auth.type` against your inputs: required secret → `api_key`, optional secret → `optional_api_key`, no secret → `none`, hosted OAuth endpoint → `oauth`.
+6. **`capabilities`.** Set what the server really implements. `read_only_mode: true` only if it never writes.
 
-Demonstrates commercial/sponsored features:
-- Sponsored badge and metadata
-- Complete sponsorship information (name, logo, campaign tracking)
-- Commercial license
-- Popular badge
-- Marketing-focused media content
+## Validate
 
-**Use this pattern for sponsored server listings and commercial offerings.**
+```bash
+pnpm validate servers/<your-id>.json
+pnpm check-conflicts
+pnpm test
+```
 
----
-
-### 4. [read-only-example.json](./read-only-example.json)
-**Safe Read-Only Server**
-
-Key features:
-- `read_only_mode: true` capability - no destructive actions
-- `optional_api_key` auth - works without auth, enhanced with key
-- Documentation/search use case
-- Remote hosted with no prerequisites
-- Minimal configuration for quick adoption
-
-**Use this pattern for documentation, search, and knowledge-base servers that don't modify data.**
-
----
-
-## Schema Features Comparison
-
-| Feature | Complete | Remote | Sponsored | Read-Only |
-|---------|----------|--------|-----------|-----------|
-| **Transport** | stdio | http | http | http |
-| **Hosting Type** | local | remote | remote | remote |
-| **Auth Type** | api_key | oauth | api_key | optional_api_key |
-| **Read-Only** | ❌ | ❌ | ❌ | ✅ |
-| **Badges** | 3 badges | 2 badges | 3 badges | 2 badges |
-| **Sponsored** | ❌ | ❌ | ✅ | ❌ |
-| **Media** | Full (3 SS + video + banner) | Partial | Full | Partial |
-| **Prerequisites** | Node.js 18+ | None | None | None |
-| **Difficulty** | moderate | easy | easy | easy |
-
----
-
-## Field Reference
-
-### Required Fields
-- `id` - Unique identifier in reverse-domain notation
-- `name` - Display name
-- `transport` - Transport configuration (stdio or http)
-
-### Recommended Fields
-- `description` - What the server does
-- `logo` - HTTP(S) URL to a logo image (PNG/SVG). Emoji are not accepted. Legacy `icon` field name is still supported.
-- `categories` - For discoverability
-- `badges` - Trust indicators (official, verified, featured, sponsored, popular)
-- `hosting_type` - local, remote, or hybrid
-- `license` - SPDX license identifier
-- `installation` - Difficulty, prerequisites, estimated time
-- `capabilities` - Supported features (tools, resources, prompts, read_only_mode)
-- `publisher` - Publisher information with verification status
-- `links` - Repository, homepage, documentation
-
-### Optional Enhanced Fields
-- `media` - Screenshots, demo video, banner image
-- `sponsored` - Sponsorship details (if applicable)
-- `changelog_url` - Link to version history
-- `platforms` - Supported platforms (default: ["all"])
-
----
-
-## Creating Your Server Definition
-
-1. **Choose a template** based on your server type:
-   - Local CLI tool → Use `complete-example.json`
-   - Cloud/SaaS API → Use `remote-hosted-example.json`
-   - Documentation/Search → Use `read-only-example.json`
-   - Sponsored listing → Use `sponsored-example.json`
-
-2. **Validate against schema**:
-   ```bash
-   # Install a JSON schema validator
-   npm install -g ajv-cli
-   
-   # Validate your definition
-   ajv validate -s ../schemas/server-definition.schema.json -d your-server.json
-   ```
-
-3. **Test locally** with McpMux before submitting
-
-4. **Submit via Pull Request** to the mcp-servers repository
-
----
-
-## Badge Guidelines
-
-| Badge | Criteria |
-|-------|----------|
-| `official` | Created/maintained by the service's official team |
-| `verified` | Publisher identity verified, domain ownership confirmed |
-| `featured` | Highlighted by McpMux team for quality/popularity |
-| `sponsored` | Commercial sponsored listing |
-| `popular` | High usage metrics (downloads, stars) |
-
----
+`pnpm test` also validates everything in `examples/`. If you add an example, add a row for it to the table above. A test checks that every example is listed.
 
 ## Best Practices
 
-### Logos
-- Provide an HTTP(S) URL to a PNG/SVG logo — emoji are not accepted
-- Prefer GitHub avatars (`https://avatars.githubusercontent.com/u/<id>?v=4`) or official brand URLs
-- Recommended size: 128x128px or 256x256px
-- The field name is `logo`; the legacy `icon` field name is still supported but discouraged
+- **Logos:** an HTTP(S) URL to a PNG/SVG. Emoji aren't accepted. Prefer GitHub avatars (`https://avatars.githubusercontent.com/u/<id>?v=4`) or official brand URLs.
+- **Descriptions:** one or two plain sentences on what the server does. No marketing hype.
+- **`obtain` instructions:** numbered steps separated by `\n`, naming the exact scopes or permissions needed. Keep `button_label` short ("Get API Key", "Create Token").
+- **Media (optional):** up to 5 screenshots (1200×800), a demo video, and a banner (1200×400).
 
-### Screenshots
-- Max 5 screenshots
-- Use clear, high-resolution images
-- Show actual functionality
-- Recommended size: 1200x800px
-
-### Banners
-- For featured display on homepage
-- Recommended size: 1200x400px
-- Professional design with clear branding
-
-### Descriptions
-- Keep under 150 characters
-- Focus on user value, not implementation
-- Avoid marketing hype
-- Be specific about capabilities
-
-### Installation Difficulty
-- **Easy**: Click and go, no prerequisites
-- **Moderate**: 1-2 prerequisites (Node.js, Docker)
-- **Advanced**: Multiple dependencies, complex setup, compilation
-
----
-
-## Questions?
-
-See the [main schema documentation](../schemas/README.md) or contact the McpMux team.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for the full contributor guide.

@@ -1,0 +1,64 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "community.filesystem",
+  "name": "Filesystem",
+  "alias": "fs",
+  "description": "Read, write, and manage files and directories on the local filesystem. Provides secure, scoped access to specified directories.",
+  "logo": "https://avatars.githubusercontent.com/u/182288589?v=4",
+  "schema_version": "2.1",
+  "categories": [
+    "file-system"
+  ],
+  "tags": [
+    "filesystem",
+    "files",
+    "directories",
+    "local",
+    "read",
+    "write"
+  ],
+  "transport": {
+    "type": "stdio",
+    "command": "npx",
+    "args": [
+      "-y",
+      "@modelcontextprotocol/server-filesystem",
+      "${input:ALLOWED_DIR}"
+    ],
+    "metadata": {
+      "inputs": [
+        {
+          "id": "ALLOWED_DIR",
+          "label": "Allowed Directory",
+          "description": "Path to the directory the server is allowed to access. The server will only read/write files within this directory.",
+          "type": "directory_path",
+          "required": true,
+          "secret": false,
+          "placeholder": "C:\\Users\\you\\projects  or  /home/you/projects"
+        }
+      ]
+    }
+  },
+  "auth": {
+    "type": "none"
+  },
+  "contributor": {
+    "name": "Model Context Protocol",
+    "github": "modelcontextprotocol",
+    "url": "https://modelcontextprotocol.io"
+  },
+  "links": {
+    "repository": "https://github.com/modelcontextprotocol/servers",
+    "homepage": "https://modelcontextprotocol.io",
+    "documentation": "https://github.com/modelcontextprotocol/servers/blob/main/src/filesystem/README.md"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": false,
+    "read_only_mode": false
+  }
+}

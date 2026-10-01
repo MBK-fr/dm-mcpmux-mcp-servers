@@ -1,9 +1,9 @@
 {
   "$schema": "../schemas/server-definition.schema.json",
-  "id": "com.notion-mcp",
-  "name": "Notion",
-  "alias": "notion",
-  "description": "Read and write Notion pages, databases, and blocks",
+  "id": "com.notion-mcp-npx",
+  "name": "Notion (npx)",
+  "alias": "notion-npx",
+  "description": "Read and write Notion pages, databases, and blocks locally via npx. Uses a Notion integration token for authentication.",
   "logo": "https://avatars.githubusercontent.com/u/4792552?v=4",
   "schema_version": "2.1",
   "categories": [
@@ -14,7 +14,10 @@
     "notion",
     "notes",
     "wiki",
-    "database"
+    "database",
+    "pages",
+    "blocks",
+    "knowledge-base"
   ],
   "transport": {
     "type": "stdio",
@@ -24,21 +27,21 @@
       "@notionhq/notion-mcp-server"
     ],
     "env": {
-      "NOTION_API_KEY": "${input:NOTION_API_KEY}"
+      "NOTION_TOKEN": "${input:NOTION_TOKEN}"
     },
     "metadata": {
       "inputs": [
         {
-          "id": "NOTION_API_KEY",
+          "id": "NOTION_TOKEN",
           "label": "Notion Integration Token",
-          "description": "Internal integration token from Notion",
-          "type": "password",
+          "description": "Internal integration secret token from Notion. Share the relevant pages/databases with your integration after creating it.",
+          "type": "text",
           "required": true,
           "secret": true,
-          "placeholder": "secret_...",
+          "placeholder": "ntn_xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
           "obtain": {
-            "url": "https://www.notion.so/my-integrations",
-            "instructions": "1. Go to notion.so/my-integrations\n2. Create a new integration\n3. Copy the Internal Integration Token",
+            "url": "https://www.notion.so/profile/integrations",
+            "instructions": "1. Go to notion.so/profile/integrations\n2. Click 'New integration'\n3. Give it a name and select your workspace\n4. Copy the Internal Integration Secret (starts with ntn_)\n5. Share desired pages/databases with the integration",
             "button_label": "Create Integration"
           }
         }
@@ -47,7 +50,7 @@
   },
   "auth": {
     "type": "api_key",
-    "instructions": "Create an integration at notion.so/my-integrations"
+    "instructions": "Create an integration at notion.so/profile/integrations and share pages with it"
   },
   "contributor": {
     "name": "Notion",
@@ -56,6 +59,7 @@
   },
   "links": {
     "repository": "https://github.com/makenotion/notion-mcp-server",
+    "homepage": "https://notion.so",
     "documentation": "https://developers.notion.com"
   },
   "platforms": [
@@ -66,5 +70,6 @@
     "resources": true,
     "prompts": false,
     "read_only_mode": false
-  }
+  },
+  "changelog_url": "https://github.com/makenotion/notion-mcp-server/releases"
 }
