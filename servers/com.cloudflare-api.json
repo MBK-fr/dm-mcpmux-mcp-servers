@@ -1,0 +1,52 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "com.cloudflare-api",
+  "name": "Cloudflare API",
+  "alias": "cloudflare",
+  "description": "Connect to the Cloudflare API to manage DNS, Workers, Pages, Zero Trust, D1, KV, R2, and more. Uses Code Mode for token-efficient search and execution across 2,500+ endpoints.",
+  "logo": "https://avatars.githubusercontent.com/u/314135?v=4",
+  "schema_version": "2.1",
+  "categories": [
+    "cloud",
+    "developer-tools"
+  ],
+  "tags": [
+    "cloudflare",
+    "api",
+    "workers",
+    "dns",
+    "serverless",
+    "cloud",
+    "security"
+  ],
+  "transport": {
+    "type": "http",
+    "url": "https://mcp.cloudflare.com/mcp",
+    "metadata": {
+      "inputs": []
+    }
+  },
+  "auth": {
+    "type": "oauth",
+    "instructions": "Connect via OAuth in your browser when prompted by your MCP client, or supply a Cloudflare API token with Bearer authentication."
+  },
+  "contributor": {
+    "name": "Cloudflare",
+    "github": "cloudflare",
+    "url": "https://developers.cloudflare.com"
+  },
+  "links": {
+    "repository": "https://github.com/cloudflare/mcp",
+    "homepage": "https://developers.cloudflare.com/agents/model-context-protocol/mcp-servers-for-cloudflare/",
+    "documentation": "https://github.com/cloudflare/mcp#readme"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false,
+    "read_only_mode": false
+  }
+}
