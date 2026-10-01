@@ -1,0 +1,53 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "ai.magichour-mcp-http",
+  "name": "Magic Hour",
+  "alias": "magic-hour",
+  "description": "Generate and edit video, image, and audio assets through Magic Hour's remote MCP server using AI tools for animation, talking photos, video editing, and face swap.",
+  "logo": "https://avatars.githubusercontent.com/u/135557112?v=4",
+  "schema_version": "2.1",
+  "categories": [
+    "ai-ml",
+    "design"
+  ],
+  "tags": [
+    "magichour",
+    "video",
+    "image",
+    "audio",
+    "ai",
+    "generative-ai",
+    "animation",
+    "face-swap"
+  ],
+  "transport": {
+    "type": "http",
+    "url": "https://mcp.magichour.ai/",
+    "metadata": {
+      "inputs": []
+    }
+  },
+  "auth": {
+    "type": "oauth",
+    "instructions": "Connect via OAuth 2.1 in your browser when prompted by your MCP client. Grants access to generate media using your Magic Hour account."
+  },
+  "contributor": {
+    "name": "Magic Hour",
+    "github": "magichourhq",
+    "url": "https://magichour.ai"
+  },
+  "links": {
+    "repository": "https://github.com/magichourhq/magic-hour-mcp",
+    "homepage": "https://magichour.ai",
+    "documentation": "https://magichour.ai/mcp"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false,
+    "read_only_mode": false
+  }
+}
