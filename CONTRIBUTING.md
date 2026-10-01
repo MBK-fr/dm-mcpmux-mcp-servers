@@ -109,11 +109,18 @@ mcp-servers/
 ├── schemas/
 │   └── server-definition.schema.json       # JSON Schema 2020-12 — the contract
 ├── categories.json                         # Allowed category IDs
-├── examples/
-│   ├── complete-example.json               # stdio server with API key + obtain
-│   ├── remote-hosted-example.json          # HTTP server with OAuth
-│   ├── read-only-example.json              # HTTP docs/search server, no auth
-│   └── sponsored-example.json              # stdio with integration token
+├── examples/                               # Validated templates — see examples/README.md
+│   ├── stdio-no-auth.json                  # stdio, no inputs
+│   ├── stdio-local-path.json               # stdio, non-secret path input, auth none
+│   ├── stdio-select-toggle.json            # stdio, select + boolean options
+│   ├── stdio-api-key.json                  # stdio, required API key in env
+│   ├── stdio-multi-input.json              # uvx, connection details with defaults
+│   ├── complete-example.json               # docker, token via -e passthrough
+│   ├── sponsored-example.json              # npx, integration token
+│   ├── read-only-example.json              # HTTP docs server, no auth
+│   ├── http-api-key-header.json            # HTTP, token in Authorization header
+│   ├── http-optional-api-key.json          # HTTP, optional token header
+│   └── remote-hosted-example.json          # HTTP, OAuth handled by McpMux
 ├── scripts/
 │   ├── validate.js                         # AJV validation + conflict detection
 │   └── build-bundle.js                     # Aggregates definitions into bundle.json
@@ -122,7 +129,7 @@ mcp-servers/
 └── CONTRIBUTING.md                         # This file
 ```
 
-Pick the example that most resembles the server you're contributing and start from there — it's faster than building from scratch and ensures you don't miss fields.
+Pick the example that most resembles the server you're contributing and start from there — it's faster than building from scratch and ensures you don't miss fields. [`examples/README.md`](examples/README.md) has a table of which example fits which kind of server; every example is a copy of a live definition and is validated by `pnpm test`.
 
 ---
 
@@ -174,18 +181,18 @@ Use when they add value:
 
 ## ID & Filename Rules
 
-IDs follow the format `{tld}.{publisher}-{name}`:
+IDs follow the format `{tld}.{publisher}-{name}`, usually ending in a suffix for how the server runs: `-npx`, `-uvx`, `-docker` or `-http`. The suffix lets one product ship several variants (`com.context7-mcp-npx`, `com.context7-mcp-docker`, `com.context7-mcp-http`).
 
 | Namespace | Who | Examples |
 |-----------|-----|----------|
-| `com.*` | Official publisher or a well-known org with legitimate claim to the namespace | `com.github-mcp`, `com.notion-mcp`, `com.cloudflare-docs` |
-| `community.*` | Third-party contributors — this is where most submissions live | `community.sqlite`, `community.brave-search` |
+| `com.*` (or the publisher's own TLD: `io.*`, `ai.*`, `co.*`, …) | Official publisher or a well-known org with legitimate claim to the namespace | `com.github-mcp-docker`, `com.notion-mcp-npx`, `com.cloudflare-docs` |
+| `community.*` | Third-party contributors packaging someone else's server | `community.sqlite`, `community.brave-search-npx` |
 
 Additional rules the validator enforces:
 
 - **Lowercase** only. No uppercase, no spaces, no underscores in the publisher or name segment.
 - **Regex:** `^[a-z0-9]+\.[a-z0-9][a-z0-9-]*$`. One dot, first segment is TLD-ish, second segment starts with alphanumeric and may contain hyphens.
-- **Filename must match ID:** `servers/com.github-mcp.json`. The bundler derives the filename from the ID.
+- **Filename must match ID:** `servers/com.github-mcp-docker.json`. The bundler derives the filename from the ID.
 - **Uniqueness:** `pnpm check-conflicts` fails if an ID is reused, or if an `alias` collides with any `id` or other `alias` in the registry.
 - **Multiple servers per publisher are fine:** `com.cloudflare-docs` and `com.cloudflare-bindings` coexist happily.
 
@@ -214,7 +221,7 @@ Spawns a process on the user's machine; McpMux speaks MCP over stdin/stdout. Use
       {
         "id": "BRAVE_API_KEY",
         "label": "Brave Search API Key",
-        "type": "password",
+        "type": "text",
         "required": true,
         "secret": true,
         "placeholder": "BSAxxxx",
@@ -273,7 +280,9 @@ Reference inputs as `${input:ID}` anywhere inside `env`, `args`, or `headers`:
 "headers": { "Authorization": "Bearer ${input:TOKEN}" }
 ```
 
-**Every placeholder must have a matching `inputs[].id`.** The `build-bundle.js` step doesn't catch this today, but the UX breaks silently if a user submits the form and McpMux tries to substitute a placeholder that has no corresponding input.
+**Every placeholder must have a matching `inputs[].id`.** `pnpm test` fails if one doesn't. An unmatched placeholder is never filled in, so the server would receive the literal text `${input:...}`.
+
+**The reverse matters too: every input should be referenced by a placeholder.** On stdio, McpMux also exports each input as an env var named after its `id`. On http, an input that isn't used in `headers` or `url` is collected from the user and never sent.
 
 ### Input Definition
 
@@ -304,7 +313,7 @@ Pick the type that matches how the value is used:
 | `file_path` | File picker. |
 | `directory_path` | Directory picker. |
 
-There is no dedicated `password` input type in the **schema enum** — use `type: "text"` plus `secret: true` for API keys. (The UI masks secret fields regardless of `type`.) Existing definitions use `type: "password"` informally; the schema's strict input-type enum is the source of truth, so prefer `text + secret: true` for new submissions.
+There is no `password` input type: the schema rejects `"type": "password"` and validation fails. For API keys, tokens and passwords, use `type: "text"` plus `secret: true`. The UI masks secret fields regardless of `type`.
 
 **Always pair API keys with `secret: true` and `required: true`.** That's how McpMux knows to stash the value in the OS keychain instead of SQLite.
 
@@ -350,7 +359,11 @@ The top-level `auth` field advertises what kind of credential the server expects
 
 `instructions` is free-form. Keep it to one or two sentences — the detailed flow belongs in the input's `obtain` block.
 
-> **Note:** `auth.type` is a hint to the UI; McpMux doesn't use it to decide whether to inject credentials into the transport — that's driven by `inputs` and `${input:...}` placeholders. Both need to be consistent.
+> **`auth.type` does not create an input.** It's the badge and help text users see. The setup form comes only from `transport.metadata.inputs`, and a value reaches the server only through a `${input:ID}` placeholder: `env` / `args` / `command` for stdio, `headers` / `url` for http. An `api_key` server with no inputs never asks for a key. An http input that isn't referenced in `headers` or `url` is never sent.
+>
+> The one behavioral exception is `oauth`: McpMux won't auto-connect an `oauth` server until the user has signed in through McpMux's browser flow. For http servers, McpMux starts OAuth when the endpoint answers `401`, and skips it when the definition sends its own `Authorization` header.
+>
+> See [Auth, Inputs & Placeholders](README.md#auth-inputs--placeholders--how-they-fit-together) and [Common Mistakes](README.md#common-mistakes) in the README for a decision table and worked examples.
 
 ---
 

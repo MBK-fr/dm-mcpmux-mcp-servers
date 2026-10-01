@@ -1,9 +1,9 @@
 {
   "$schema": "../schemas/server-definition.schema.json",
-  "id": "com.github-mcp-docker",
-  "name": "GitHub (Docker)",
-  "alias": "gh-docker",
-  "description": "Interact with GitHub repositories, issues, pull requests, and code security via Docker container. Supports both github.com and GitHub Enterprise instances. Requires Docker installed.",
+  "id": "com.github-mcp-http-pat",
+  "name": "GitHub (Remote PAT)",
+  "alias": "gh-pat",
+  "description": "Interact with GitHub repositories, issues, pull requests, actions, and code security through GitHub's hosted remote MCP server. Authenticates with a Personal Access Token.",
   "logo": "https://avatars.githubusercontent.com/u/9919?v=4",
   "schema_version": "2.1",
   "categories": [
@@ -19,32 +19,20 @@
     "repos",
     "actions",
     "code-review",
-    "enterprise",
-    "ghes"
+    "pat"
   ],
   "transport": {
-    "type": "stdio",
-    "command": "docker",
-    "args": [
-      "run",
-      "-i",
-      "--rm",
-      "-e",
-      "GITHUB_PERSONAL_ACCESS_TOKEN",
-      "-e",
-      "GITHUB_HOST",
-      "ghcr.io/github/github-mcp-server"
-    ],
-    "env": {
-      "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:GITHUB_PERSONAL_ACCESS_TOKEN}",
-      "GITHUB_HOST": "${input:GITHUB_HOST}"
+    "type": "http",
+    "url": "https://api.githubcopilot.com/mcp/",
+    "headers": {
+      "Authorization": "Bearer ${input:GITHUB_TOKEN}"
     },
     "metadata": {
       "inputs": [
         {
-          "id": "GITHUB_PERSONAL_ACCESS_TOKEN",
+          "id": "GITHUB_TOKEN",
           "label": "GitHub Personal Access Token",
-          "description": "Token used to authenticate with the GitHub API. Requires repo and read:org scopes.",
+          "description": "PAT sent as Bearer token to the GitHub remote MCP server. Requires repo and read:org scopes.",
           "type": "text",
           "required": true,
           "secret": true,
@@ -54,22 +42,13 @@
             "instructions": "1. Click 'Generate new token (classic)'\n2. Give it a name like 'McpMux'\n3. Select scopes: repo, read:org\n4. Click 'Generate token'\n5. Copy the token (starts with ghp_)",
             "button_label": "Create Token"
           }
-        },
-        {
-          "id": "GITHUB_HOST",
-          "label": "GitHub Host",
-          "description": "Hostname of your GitHub instance. Leave empty for github.com. For GitHub Enterprise Server, enter your instance hostname (e.g., github.mycompany.com). For GHEC Data Residency, use subdomain.ghe.com.",
-          "type": "text",
-          "required": false,
-          "secret": false,
-          "placeholder": "github.mycompany.com"
         }
       ]
     }
   },
   "auth": {
     "type": "api_key",
-    "instructions": "Create a personal access token at https://github.com/settings/tokens (or your Enterprise instance) with repo and read:org scopes"
+    "instructions": "Create a personal access token at https://github.com/settings/tokens with repo and read:org scopes"
   },
   "contributor": {
     "name": "GitHub",
