@@ -4,7 +4,7 @@
   "name": "Trello (HTTP)",
   "alias": "trello-http",
   "description": "Manage Trello boards, lists, cards, checklists, and more through Trello's official hosted MCP server. Connects via OAuth and exposes tools for reading and writing Trello content within a single authorised workspace.",
-  "logo": "https://avatars.githubusercontent.com/u/168894?v=4",
+  "logo": "https://avatars.githubusercontent.com/u/168166?v=4",
   "schema_version": "2.1",
   "categories": [
     "productivity"

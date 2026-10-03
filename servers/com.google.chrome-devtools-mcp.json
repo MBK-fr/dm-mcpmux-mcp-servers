@@ -4,7 +4,7 @@
   "name": "Chrome DevTools",
   "alias": "chrome-devtools",
   "description": "Control and inspect a live Chrome browser from your coding agent. Get performance traces, network and console analysis, screenshots, and reliable puppeteer-driven automation, all backed by Chrome DevTools.",
-  "logo": "https://avatars.githubusercontent.com/u/1778938?v=4",
+  "logo": "https://avatars.githubusercontent.com/u/11260967?v=4",
   "schema_version": "2.1",
   "categories": [
     "developer-tools"

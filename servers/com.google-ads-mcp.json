@@ -4,7 +4,7 @@
   "name": "Google Ads",
   "alias": "google-ads",
   "description": "Query Google Ads campaigns, performance metrics, ad groups, and customer accounts using GAQL through the Google Ads MCP server.",
-  "logo": "https://avatars.githubusercontent.com/u/1041926?v=4",
+  "logo": "https://avatars.githubusercontent.com/u/4551618?v=4",
   "schema_version": "2.1",
   "categories": [
     "productivity",
