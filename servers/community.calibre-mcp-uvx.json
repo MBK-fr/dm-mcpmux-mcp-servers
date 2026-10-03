@@ -1,0 +1,70 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "community.calibre-mcp-uvx",
+  "name": "Calibre (uvx)",
+  "alias": "calibre",
+  "description": "Manage, search, and maintain your local Calibre e-book library through natural language. Search titles and metadata, query content via semantic search, and manage books and shelves.",
+  "logo": "https://avatars.githubusercontent.com/u/34750307?v=4",
+  "schema_version": "2.1",
+  "categories": [
+    "productivity",
+    "file-system"
+  ],
+  "tags": [
+    "calibre",
+    "ebooks",
+    "books",
+    "library",
+    "reader",
+    "metadata",
+    "rag"
+  ],
+  "transport": {
+    "type": "stdio",
+    "command": "uvx",
+    "args": [
+      "--from",
+      "git+https://github.com/sandraschi/calibremcp@v1.9.0",
+      "schip-mcp-calibre"
+    ],
+    "env": {
+      "CALIBRE_LIBRARY_PATH": "${input:CALIBRE_LIBRARY_PATH}"
+    },
+    "metadata": {
+      "inputs": [
+        {
+          "id": "CALIBRE_LIBRARY_PATH",
+          "label": "Calibre Library Path",
+          "description": "Absolute path to your Calibre library directory (the folder containing metadata.db). If Calibre desktop already has a current library configured, CalibreMCP prefers that one, so point this at the same library.",
+          "type": "directory_path",
+          "required": true,
+          "secret": false,
+          "placeholder": "/path/to/Calibre Library"
+        }
+      ]
+    }
+  },
+  "auth": {
+    "type": "none",
+    "instructions": "No external authentication required. Reads and manages your local Calibre library directly from the configured directory."
+  },
+  "contributor": {
+    "name": "Leo Araya Svensson",
+    "github": "leoarayas",
+    "url": "https://github.com/leoarayas"
+  },
+  "links": {
+    "repository": "https://github.com/sandraschi/calibremcp",
+    "homepage": "https://github.com/sandraschi/calibremcp",
+    "documentation": "https://github.com/sandraschi/calibremcp#readme"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": true,
+    "read_only_mode": false
+  }
+}
