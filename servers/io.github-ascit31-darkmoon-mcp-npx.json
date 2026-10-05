@@ -1,0 +1,94 @@
+{
+  "$schema": "../schemas/server-definition.schema.json",
+  "id": "io.github-ascit31-darkmoon-mcp-npx",
+  "name": "Darkmoon (npx)",
+  "alias": "darkmoon",
+  "description": "Drive your own self-hosted Darkmoon Pro instance, an autonomous AI penetration testing platform (open source GPL-3.0 engine and CLI): start authorized pentest runs, check run status, list campaigns and read findings. Requires your own Darkmoon Pro Dashboard API; there is no hosted endpoint.",
+  "logo": "https://avatars.githubusercontent.com/u/91746957?v=4",
+  "schema_version": "2.1",
+  "categories": [
+    "security"
+  ],
+  "tags": [
+    "darkmoon",
+    "pentest",
+    "security",
+    "vulnerabilities",
+    "ai-agent",
+    "findings",
+    "self-hosted"
+  ],
+  "transport": {
+    "type": "stdio",
+    "command": "npx",
+    "args": [
+      "-y",
+      "@darkmoon_ai/mcp-server"
+    ],
+    "env": {
+      "DARKMOON_BASE_URL": "${input:DARKMOON_BASE_URL}",
+      "DARKMOON_USERNAME": "${input:DARKMOON_USERNAME}",
+      "DARKMOON_PASSWORD": "${input:DARKMOON_PASSWORD}"
+    },
+    "metadata": {
+      "inputs": [
+        {
+          "id": "DARKMOON_BASE_URL",
+          "label": "Darkmoon Dashboard URL",
+          "description": "Base URL of your self-hosted Darkmoon Pro Dashboard API. There is no hosted Darkmoon endpoint.",
+          "type": "url",
+          "required": true,
+          "secret": false,
+          "placeholder": "https://darkmoon.example.internal"
+        },
+        {
+          "id": "DARKMOON_USERNAME",
+          "label": "Dashboard Username",
+          "description": "Dashboard user the server logs in as. Use a dedicated account.",
+          "type": "text",
+          "required": true,
+          "secret": false,
+          "placeholder": "darkmoon-mcp"
+        },
+        {
+          "id": "DARKMOON_PASSWORD",
+          "label": "Dashboard Password",
+          "description": "Password of the dashboard user above.",
+          "type": "text",
+          "required": true,
+          "secret": true,
+          "placeholder": "your dashboard password",
+          "obtain": {
+            "url": "https://github.com/ASCIT31/darkmoon-mcp-server#readme",
+            "instructions": "1. Open your own self-hosted Darkmoon Pro dashboard\n2. Create or pick a dedicated dashboard user for the MCP server\n3. Enter that user's name and password here (see the server README for details)",
+            "button_label": "Open README"
+          }
+        }
+      ]
+    }
+  },
+  "auth": {
+    "type": "basic",
+    "instructions": "Use the username and password of a user on your own Darkmoon Pro dashboard. The server also supports a pre-issued JWT via DARKMOON_TOKEN if you run it outside McpMux."
+  },
+  "contributor": {
+    "name": "ASC-IT",
+    "github": "ASCIT31",
+    "url": "https://dark-moon.org"
+  },
+  "links": {
+    "repository": "https://github.com/ASCIT31/darkmoon-mcp-server",
+    "homepage": "https://dark-moon.org",
+    "documentation": "https://github.com/ASCIT31/darkmoon-mcp-server#readme"
+  },
+  "platforms": [
+    "all"
+  ],
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false,
+    "read_only_mode": false
+  },
+  "changelog_url": "https://github.com/ASCIT31/darkmoon-mcp-server/releases"
+}
